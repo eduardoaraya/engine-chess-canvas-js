@@ -43,7 +43,7 @@
             const board = renderBoard(62.300,0.5);
 
             board.forEach((item,number) => {
-                let color = (number%2 == 0) ? '#222' : '#FFF';
+                let color = (number%2 == 0) ? '#FFF' : '#222';
                 let lastcolor = '';
                 item.forEach( pixel => {
                     if(lastcolor)
