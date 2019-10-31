@@ -13,11 +13,11 @@ class Board{
     }
 
     printBoard(item,number){
-        let color = (number%2 == 0) ? '#FAFAFA' : '#222';
+        let color = (number%2 == 0) ? '#FFF' : '#666';
         let lastcolor = '';
         item.forEach( pixel => {
             if(lastcolor)
-                color = lastcolor == '#222' ? '#FAFAFA' : '#222'
+                color = lastcolor == '#666' ? '#FFF' : '#666'
             this.context.fillStyle = color;
             lastcolor = color;
             this.context.fillRect( pixel.x, pixel.y, pixel.size, pixel.size);
@@ -29,38 +29,41 @@ class Board{
             return {  
                 column:number,
                 row,
-                w:pixel.size / 2,
-                h:pixel.size / 2,
-                x:pixel.x + ((pixel.size / 2) / 2),
-                y:pixel.y + ((pixel.size / 2) / 2),
+                w:pixel.size,
+                h:pixel.size,
+                x:pixel.x,
+                y:pixel.y,
             }
         })
         let pieces = [];
         positions.forEach( pixel => {
             Object.values(game).forEach(item => {
-                if( item.init.a.x.includes(pixel.column) && item.init.a.y.includes(pixel.row) ){
+                if( item.cordinates.a.x.includes(pixel.column) && item.cordinates.a.y.includes(pixel.row) ){
                     pieces.push({
                         x:pixel.x,
                         y:pixel.y,
                         w:pixel.w,
                         h:pixel.h,
+                        img:item.images.a
                     });
                 }
-                if( item.init.b.x.includes(pixel.column) && item.init.b.y.includes(pixel.row) ){
+                if( item.cordinates.b.x.includes(pixel.column) && item.cordinates.b.y.includes(pixel.row) ){
                     pieces.push({
                         x:pixel.x,
                         y:pixel.y,
                         w:pixel.w,
                         h:pixel.h,
+                        img:item.images.b
                     });
                 }
             })
         })
-        pieces.forEach(item=>{
-            this.context.fillStyle = 'green';
-            this.context.fillRect( item.x, item.y , item.w , item.h );
+        pieces.forEach( item => {
+            const base_image = new Image();
+            base_image.src = item.img;
+            base_image.onload = () => {
+              this.context.drawImage(base_image, item.x, item.y , item.w , item.h );
+            }
         })
-
-
     }
 }

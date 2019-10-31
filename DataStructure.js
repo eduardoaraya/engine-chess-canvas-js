@@ -40,8 +40,8 @@ class DataStructure{
     }
 
     definePositions() {
-        return this.defineRows().map((row,numberRow) => {
-            return row.map((column,numberColumn) => {
+        return this.defineRows().map((row,numberColumn) => {
+            return row.map((column,numberRow) => {
                 return {
                     x: numberColumn * (this.size + this.margin),
                     y: numberRow * (this.size + this.margin),
