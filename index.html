@@ -14,75 +14,29 @@
             justify-content: center;
             align-items: center;
         }
-        #canvas{
+        #board{
             border:solid 3px #222;
             image-rendering: pixelated;
-            background:  #222;
+            background:  #BBB;
             box-shadow: 0px 15px 20px -3px rgba(0,0,0,0.45);
         }
     </style>
 </head>
 <body>
-        <canvas id="canvas" width="500" height="500"></canvas>
+        <canvas id="board" width="400" height="400"></canvas>
+        <script src="./DataStructure.js"></script>
+        <script src="./Board.js"></script>
+
         <script>
-
-            const canvas = document.getElementById('canvas');
-            var ctx = canvas.getContext('2d');
             
-            const pieces = {
-                "peao":{
-                    x:1,
-                    y:52
-                },
-                "torre":{
-                    x:1,
-                    y:1
-                }
-            };
+            const dataStructure = new DataStructure({
+                size:50,
+                margin:0,
+                boardLength:8
+            });     
 
-            const board = renderBoard(62.300,0.5);
-
-            board.forEach((item,number) => {
-                let color = (number%2 == 0) ? '#FFF' : '#222';
-                let lastcolor = '';
-                item.forEach( pixel => {
-                    if(lastcolor)
-                        color = lastcolor == '#222' ? '#FFF' : '#222'
-                    ctx.fillStyle = color;
-                    lastcolor = color;
-
-                    ctx.fillRect( pixel.x, pixel.y, 60, 60);
-                })
-            })
-
-            function renderColumn(){
-                let columns = [];
-                for ( x = 0 ; x < 8 ; x++ ){
-                    columns.push({ x:1,y:1 });
-                }
-                return columns;
-            }
-
-            function renderRow(){
-                const columns = renderColumn();
-                let row = [];
-                for ( x = 0 ; x < columns.length ; x++ ){
-                    row.push(columns);
-                }
-                return row;
-            }
-
-
-            function renderBoard(size,margin) {
-                return renderRow().map((row,numberRow) => {
-                    return row.map((column,numberColumn) => {
-                        return {
-                            x: numberColumn * (size + margin),
-                            y: numberRow * (size + margin)
-                        };
-                    })
-                });
-            }
+            const board = new Board('board',dataStructure.structure);
+            board.render();
 
         </script>
 </body>
