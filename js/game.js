@@ -7,13 +7,13 @@ export const config = {
         'peao':{
             name:"peao",
             cordinates:{
-                b:{
-                    x:[0,1,2,3,4,5,6,7],
-                    y:[1,1,1,1,1,1,1,1]
-                },
                 a:{
                     x:[0,1,2,3,4,5,6,7],
                     y:[6,6,6,6,6,6,6,6]
+                },
+                b:{
+                    x:[0,1,2,3,4,5,6,7],
+                    y:[1,1,1,1,1,1,1,1]
                 }
             },
             images:{
@@ -24,14 +24,14 @@ export const config = {
         'torre':{
             name:"torre",
             cordinates:{
+                a:{
+                    x:[7,0],
+                    y:[7,7]
+                },
                 b:{
                     x:[0,7],
                     y:[0,0]
                 },
-                a:{
-                    x:[7,0],
-                    y:[7,7]
-                }
             },
             images:{
                 a:'./assets/torreA.png',
@@ -41,14 +41,14 @@ export const config = {
         'cavalo':{
             name:"cavalo",
             cordinates:{
+                a:{
+                    x:[1,6],
+                    y:[7,7]
+                },
                 b:{
                     x:[1,6],
                     y:[0,0]
                 },
-                a:{
-                    x:[1,6],
-                    y:[7,7]
-                }
             },
             images:{
                 a:'./assets/cavaloA.png',
@@ -58,14 +58,14 @@ export const config = {
         'bispo':{
             name:"bispo",
             cordinates:{
+                a:{
+                    x:[2,5],
+                    y:[7,7]
+                },
                 b:{
                     x:[2,5],
                     y:[0,0]
                 },
-                a:{
-                    x:[2,5],
-                    y:[7,7]
-                }
             },
             images:{
                 a:'./assets/bispoA.png',
@@ -75,14 +75,14 @@ export const config = {
         'rainha':{
             name:"rainha",
             cordinates:{
+                a:{
+                    x:[3],
+                    y:[7]
+                },
                 b:{
                     x:[3],
                     y:[0]
                 },
-                a:{
-                    x:[3],
-                    y:[7]
-                }
             },
             images:{
                 a:'./assets/rainhaA.png',
@@ -92,14 +92,14 @@ export const config = {
         'rei':{
             name:"rei",
             cordinates:{
+                a:{
+                    x:[4],
+                    y:[7]
+                },
                 b:{
                     x:[4],
                     y:[0]
                 },
-                a:{
-                    x:[4],
-                    y:[7]
-                }
             },
             images:{
                 a:'./assets/reiA.png',

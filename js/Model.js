@@ -19,23 +19,17 @@ export default class Model{
     }
 
     defineColumns(){
-
         let columns = [];
-
         for ( let x = 0 ; x < this.boardLength ; x++ )
             columns.push({ x:1,y:1 });
-        
         return columns;
     }
 
     defineRows(){
-
         const columns = this.defineColumns();
         let row = [];
-
         for ( let x = 0 ; x < this.boardLength ; x++ )
             row.push(columns);
-        
         return row;
     }
 
