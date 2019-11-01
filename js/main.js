@@ -17,6 +17,9 @@ pieces.render((item,number) => pieces.initGame(item,number));
 
 const plays = new Plays('plays',dimensions);
 
-pieces.addEventBoard((target) => {
-    plays.selectPiece(target)
-});
+pieces.addEventBoard(played);
+
+function played(target,destiny){
+    pieces.movePiece = pieces.movePiece.bind(pieces);
+    plays.selectPiece(target,destiny,pieces.movePiece);
+}

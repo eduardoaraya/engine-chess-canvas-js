@@ -2,6 +2,8 @@ const GAME = {};
 
 export default GAME;
 
+export const plays = [];
+
 export const config = {
     'pieces':{
         'peao':{

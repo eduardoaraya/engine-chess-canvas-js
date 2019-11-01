@@ -1,5 +1,5 @@
 import Canvas from './Canvas.js';
-import GAME , { config } from "./game.js"
+import GAME , { config, plays } from "./game.js"
 
 export default class Pieces extends Canvas {
 
@@ -73,15 +73,39 @@ export default class Pieces extends Canvas {
             const cond1 = layerX >= GAME[piece].x && layerX <= limit.x;
             const cond2 = layerY >= GAME[piece].y && layerY <= limit.y;
             if (cond1 && cond2)
-                return GAME[piece];
+                return [GAME[piece],null];
         }
-        return null;
+        for ( let x = 0; x < this.model.grid.length ; x++ ) {
+            const item = this.model.grid[x];
+            for( let i = 0 ; i < item.length ; i ++ ){
+                const pixel = item[i];
+                const limit = {
+                    x: pixel.x + pixel.size,
+                    y: pixel.y + pixel.size
+                }
+                const cond1 = layerX >= pixel.x && layerX <= limit.x;
+                const cond2 = layerY >= pixel.y && layerY <= limit.y;
+                if (cond1 && cond2)
+                    return [null,pixel];
+            }
+        }
     }
 
     addEventBoard(event) {
         this.canvas.addEventListener('click', (e) => {
-            const piece = this.getPieceFromClick(e);
-            event(piece);
+            const [piece,move] = this.getPieceFromClick(e);
+            event(piece,move);
         })
+    }
+
+    movePiece(plays){
+        const [piece, destiny] = plays;
+
+        this.context.clearRect(piece.x,piece.y,piece.size,piece.size);
+        GAME[piece.target].x = destiny.x;
+        GAME[piece.target].y = destiny.y;
+        const base_image = new Image();
+        base_image.src = piece.img;
+        base_image.onload = () => this.context.drawImage(base_image, destiny.x, destiny.y, piece.size, piece.size);
     }
 }
