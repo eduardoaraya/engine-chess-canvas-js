@@ -1,4 +1,4 @@
-class DataStructure{
+export default class Model{
 
     constructor({
         size,
@@ -10,11 +10,11 @@ class DataStructure{
         this.boardLength = boardLength;
     }
 
-    get structure(){
+    get grid(){
         return this.definePositions();
     }
 
-    set structure(structure){
+    set grid(structure){
         throw new Error('Error')
     }
 
@@ -43,6 +43,8 @@ class DataStructure{
         return this.defineRows().map((row,numberColumn) => {
             return row.map((column,numberRow) => {
                 return {
+                    column: numberColumn,
+                    row: numberRow,
                     x: numberColumn * (this.size + this.margin),
                     y: numberRow * (this.size + this.margin),
                     size: this.size
