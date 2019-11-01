@@ -9,5 +9,5 @@ const dimensions = {
 const board = new Board('board',dimensions);
 board.render((item,number) => {
     board.printBoard(item,number)
-    board.printPieces(item,number)
+    // board.printPieces(item,number)
 });
