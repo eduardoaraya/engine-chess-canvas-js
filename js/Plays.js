@@ -5,33 +5,32 @@ export default class Plays extends Canvas {
 
     pieceSelected = null;
 
-    constructor(canvas,dimensions){
+    constructor(canvas,dimensions,Pieces){
         super(canvas,dimensions)
+        this._pieces = Pieces;
+        this.listenerClick()
     }
 
-    selectPiece(target,destiny,move){
-
+    selectPiece(event){
         this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
-
+        const [target, destiny] = this._pieces.handleClick(event)
         if(target){
             this.pieceSelected = target;
             this.context.fillStyle = 'green'
             this.context.fillRect(target.x, target.y, target.size, target.size);
         }else if(!target && this.pieceSelected ){
-            move([this.pieceSelected,destiny]);
+            this._pieces.movePiece(this.pieceSelected,destiny);
             this.pieceSelected = null
         }else{
             this.pieceSelected = null;
         }
     }
 
-    // Object.values(GAME).forEach(piece => {
-        // if(target.target == piece.target){
-            // console.log(target)
-            // const base_image = new Image();
-            // base_image.src = piece.img;
-            // base_image.onload = () => this.context.drawImage(base_image, piece.x, piece.y, piece.size, piece.size);
-    //     }
-    // })
+    listenerClick() {
+        this._pieces
+            .canvas
+            .addEventListener('click', (event) => this.selectPiece(event))
+    }
+
 
 }

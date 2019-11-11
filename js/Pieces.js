@@ -1,68 +1,59 @@
 import Canvas from './Canvas.js';
-import GAME , { config, plays } from "./game.js"
+import GAME , { config, plays as PLAYS } from "./game.js"
 
 export default class Pieces extends Canvas {
 
     constructor(canvas,dimensions){
         super(canvas,dimensions);
+        this.initGame();
     }
 
-    initGame(item, column) {
-        const pieces = this.initialPositionPieces(item, column);
-        pieces.forEach(piece => {
-            const base_image = new Image();
-            base_image.src = piece.img;
-            base_image.onload = () => this.context.drawImage(base_image, piece.x, piece.y, piece.size, piece.size);
-
-            if ([piece.id + '_B'] in GAME){
-                GAME[piece.id + '_A'] = piece;
-                GAME[piece.id + '_A'].target = piece.id + '_A';
-            }else{
-                GAME[piece.id + '_B'] = piece;
-                GAME[piece.id + '_B'].target = piece.id + '_B';
-            }
-        })
-    }
-
-    initialPositionPieces(item, column) {
-        let pieces = [];
-        item.forEach((pixel, row) => {
-            Object.values(config.pieces).forEach(item => {
-                if (item.cordinates.a.x.includes(column) && item.cordinates.a.y.includes(row)) {
-                    pieces.push({
-                        piece:item.name,
-                        color: 'white',
-                        id: this.getIdPiece(item.name,column),
-                        ...pixel,
-                        img: item.images.a
-                    });
+    initGame() {
+        for (let item of this.model.grid){
+            Object.values(config.pieces).forEach(piece => {
+                if (piece.cordinates.a.x.includes(item.column) && piece.cordinates.a.y.includes(item.row)) {
+                    let _id = this.getIdPiece(piece.name,item.column,'A')
+                    this.insertGame(_id,piece.name,'white',piece.images.a,item);
+                    this.printPiece(piece.images.a,item.x,item.y,item.size);
                 }
-                if (item.cordinates.b.x.includes(column) && item.cordinates.b.y.includes(row)) {
-                    pieces.push({
-                        piece:item.name,
-                        color: 'black',
-                        id: this.getIdPiece(item.name,column),
-                        ...pixel,
-                        img: item.images.b
-                    });
+                if(piece.cordinates.b.x.includes(item.column) && piece.cordinates.b.y.includes(item.row)) {
+                    let _id = this.getIdPiece(piece.name,item.column,'B')
+                    this.insertGame(_id,piece.name,'black',piece.images.b,item);
+                    this.printPiece(piece.images.b,item.x,item.y,item.size);
                 }
             })
-        })
-        return pieces;
+        }
+    }
+    
+    insertGame(_id,piece,color,img,item){
+        GAME[_id] = { _id, piece, color, img,...item };      
+    }
+    
+    printPiece(image,x,y,size){
+        const base_image = new Image();
+        base_image.src = image;
+        base_image.onload = () => this.context.drawImage(base_image, x, y, size, size);
     }
 
-    getIdPiece(name,column){
-        if(name == 'peao')
-            return `P${column}`
-        if(name == 'cavalo')
-            return `C${column}`
-        if(name == 'bispo')
-            return `B${column}`
-        if(name == 'torre')
-            return `T${column}`
-        return name;
-    }
 
+    getIdPiece(name,column,sufix){
+        switch(name){
+            case 'peao':
+                return `PEAO${column}_${sufix}`
+            case 'cavalo':
+                return `CAVALO${column}_${sufix}`
+            case 'bispo':
+                return `BISPO${column}_${sufix}`
+            case 'torre':
+                return `TORRE${column}_${sufix}`
+            case 'rei':
+                return `REI${column}_${sufix}`
+            case 'rainha':
+                return `RAINHA${column}_${sufix}`
+            default:
+                return name;
+        }
+    }
 
     getPieceFromClick({layerX, layerY}){
         for (let piece in GAME) {
@@ -73,37 +64,36 @@ export default class Pieces extends Canvas {
             const cond1 = layerX >= GAME[piece].x && layerX <= limit.x;
             const cond2 = layerY >= GAME[piece].y && layerY <= limit.y;
             if (cond1 && cond2)
-                return [GAME[piece],null];
+                return GAME[piece];
         }
-        for ( let x = 0; x < this.model.grid.length ; x++ ) {
-            const item = this.model.grid[x];
-            for( let i = 0 ; i < item.length ; i ++ ){
-                const pixel = item[i];
-                const limit = {
-                    x: pixel.x + pixel.size,
-                    y: pixel.y + pixel.size
-                }
-                const cond1 = layerX >= pixel.x && layerX <= limit.x;
-                const cond2 = layerY >= pixel.y && layerY <= limit.y;
-                if (cond1 && cond2)
-                    return [null,pixel];
+        return false;
+    }
+
+    getDestinyFromClick({layerX, layerY}){
+        const item = this.model.grid;
+        for( let i = 0 ; i < item.length ; i ++ ){
+            const pixel = item[i];
+            const limit = {
+                x: pixel.x + pixel.size,
+                y: pixel.y + pixel.size
             }
+            const cond1 = layerX >= pixel.x && layerX <= limit.x;
+            const cond2 = layerY >= pixel.y && layerY <= limit.y;
+            if (cond1 && cond2)
+                return pixel;
         }
+        return false;
     }
 
-    addEventBoard(event) {
-        this.canvas.addEventListener('click', (e) => {
-            const [piece,move] = this.getPieceFromClick(e);
-            event(piece,move);
-        })
+    handleClick(event){
+        return [this.getPieceFromClick(event),this.getDestinyFromClick(event)];
     }
 
-    movePiece(plays){
-        const [piece, destiny] = plays;
-
+    movePiece(piece, destiny){
+        console.log(piece)
         this.context.clearRect(piece.x,piece.y,piece.size,piece.size);
-        GAME[piece.target].x = destiny.x;
-        GAME[piece.target].y = destiny.y;
+        GAME[piece._id].x = destiny.x;
+        GAME[piece._id].y = destiny.y;
         const base_image = new Image();
         base_image.src = piece.img;
         base_image.onload = () => this.context.drawImage(base_image, destiny.x, destiny.y, piece.size, piece.size);

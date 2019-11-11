@@ -8,10 +8,11 @@ export default class Model{
         this.size = size;
         this.margin = margin;
         this.boardLength = boardLength;
+        this.init();
     }
 
     get grid(){
-        return this.definePositions();
+        return this._grid.flat();
     }
 
     set grid(structure){
@@ -33,8 +34,8 @@ export default class Model{
         return row;
     }
 
-    definePositions() {
-        return this.defineRows().map((row,numberColumn) => {
+    init() {
+        this._grid = this.defineRows().map((row,numberColumn) => {
             return row.map((column,numberRow) => {
                 return {
                     column: numberColumn,

@@ -1,6 +1,5 @@
-const GAME = {};
 
-export default GAME;
+export default {};
 
 export const plays = [];
 
@@ -110,3 +109,14 @@ export const config = {
         }
     }
 }
+
+
+// export const movements = {
+//     "peao": (piece) => {
+//         if(piece)
+//         return {
+//             x:piece.size + piece.x,
+//             y:y
+//         };
+//     }
+// }

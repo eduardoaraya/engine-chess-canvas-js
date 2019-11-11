@@ -6,17 +6,19 @@ export default class Board extends Canvas {
 
     constructor(element, dimensions) {
         super(element,dimensions);
+        this.render()
     }
 
-    printBoard(item, column) {
-        let color = (column % 2 == 0) ? this.colors[0] : this.colors[1];
-        let lastcolor = '';
-        item.forEach(pixel => {
-            if (lastcolor)
-                color = lastcolor == this.colors[1] ? this.colors[0] : this.colors[1]
-            this.context.fillStyle = color;
-            lastcolor = color;
+    render() {
+        for ( let pixel of this.model.grid ){
+            let colortarget;
+            if(pixel.row%2 == 0){
+                colortarget = ( pixel.column%2 == 0) ? this.colors[1] : this.colors[0]
+            }else{
+                colortarget = ( pixel.column%2 == 0) ? this.colors[0] : this.colors[1]
+            }
+            this.context.fillStyle = colortarget;
             this.context.fillRect(pixel.x, pixel.y, pixel.size, pixel.size);
-        })
+        }
     }
 }
